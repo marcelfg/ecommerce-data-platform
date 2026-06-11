@@ -1,6 +1,6 @@
 USE SCHEMA olist.raw;
 
-CREATE TABLE orders (
+CREATE TABLE IF NOT EXISTS orders (
     order_id VARCHAR,
     customer_id VARCHAR,
     order_status VARCHAR,

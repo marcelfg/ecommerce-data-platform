@@ -1,6 +1,6 @@
 USE SCHEMA olist.raw;
 
-CREATE TABLE sellers (
+CREATE TABLE IF NOT EXISTS sellers (
     seller_id VARCHAR,
     seller_zip_code_prefix VARCHAR,
     seller_city VARCHAR,

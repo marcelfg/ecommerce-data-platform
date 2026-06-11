@@ -1,6 +1,6 @@
 USE SCHEMA olist.raw;
 
-CREATE TABLE order_payments (
+CREATE TABLE IF NOT EXISTS order_payments (
     order_id VARCHAR,
     payment_sequential VARCHAR,
     payment_type VARCHAR,

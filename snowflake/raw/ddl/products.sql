@@ -1,6 +1,6 @@
 USE SCHEMA olist.raw;
 
-CREATE TABLE products (
+CREATE TABLE IF NOT EXISTS products (
     product_id VARCHAR,
     product_category_name VARCHAR,
     product_name_lenght VARCHAR,

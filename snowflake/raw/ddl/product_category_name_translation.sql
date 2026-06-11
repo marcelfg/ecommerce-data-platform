@@ -1,6 +1,6 @@
 USE SCHEMA olist.raw;
 
-CREATE TABLE product_category_name_translation (
+CREATE TABLE IF NOT EXISTS product_category_name_translation (
     product_category_name VARCHAR,
     product_category_name_english VARCHAR,
     _loaded_at TIMESTAMP_LTZ,

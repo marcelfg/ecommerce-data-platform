@@ -1,6 +1,6 @@
 USE SCHEMA olist.raw;
 
-CREATE TABLE geolocation (
+CREATE TABLE IF NOT EXISTS geolocation (
     geolocation_zip_code_prefix VARCHAR,
     geolocation_lat VARCHAR,
     geolocation_lng VARCHAR,

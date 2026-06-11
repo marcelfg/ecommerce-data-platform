@@ -1,6 +1,6 @@
 USE SCHEMA olist.raw;
 
-CREATE TABLE order_reviews (
+CREATE TABLE IF NOT EXISTS order_reviews (
     review_id VARCHAR,
     order_id VARCHAR,
     review_score VARCHAR,
