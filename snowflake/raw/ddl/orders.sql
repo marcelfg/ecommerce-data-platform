@@ -9,7 +9,7 @@ CREATE TABLE orders (
     order_delivered_carrier_date VARCHAR,
     order_delivered_customer_date VARCHAR,
     order_estimated_delivery_date VARCHAR,
-    _loaded_at TIMESTAMP_NTZ DEFAULT CURRENT_TIMESTAMP,
+    _loaded_at TIMESTAMP_LTZ,
     _source_file VARCHAR,
     _file_row_number INTEGER,
     _file_last_modified TIMESTAMP_NTZ

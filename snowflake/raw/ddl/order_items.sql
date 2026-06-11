@@ -8,7 +8,7 @@ CREATE TABLE order_items (
     shipping_limit_date VARCHAR,
     price VARCHAR,
     freight_value VARCHAR,
-    _loaded_at TIMESTAMP_NTZ DEFAULT CURRENT_TIMESTAMP,
+    _loaded_at TIMESTAMP_LTZ,
     _source_file VARCHAR,
     _file_row_number INTEGER,
     _file_last_modified TIMESTAMP_NTZ

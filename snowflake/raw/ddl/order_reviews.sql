@@ -8,7 +8,7 @@ CREATE TABLE order_reviews (
     review_comment_message VARCHAR,
     review_creation_date VARCHAR,
     review_answer_timestamp VARCHAR,
-    _loaded_at TIMESTAMP_NTZ DEFAULT CURRENT_TIMESTAMP,
+    _loaded_at TIMESTAMP_LTZ,
     _source_file VARCHAR,
     _file_row_number INTEGER,
     _file_last_modified TIMESTAMP_NTZ

@@ -6,7 +6,7 @@ CREATE TABLE geolocation (
     geolocation_lng VARCHAR,
     geolocation_city VARCHAR,
     geolocation_state VARCHAR,
-    _loaded_at TIMESTAMP_NTZ DEFAULT CURRENT_TIMESTAMP,
+    _loaded_at TIMESTAMP_LTZ,
     _source_file VARCHAR,
     _file_row_number INTEGER,
     _file_last_modified TIMESTAMP_NTZ
