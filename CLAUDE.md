@@ -57,6 +57,7 @@ This project uses [uv](https://github.com/astral-sh/uv) for package management. 
 ## Conventions
 
 - Credentials always come from `.env` via `python-dotenv`
+- Never use positional references ($1, $2, $3) in SQL — always use explicit column names with aliases
 
 ## Ground Rules
 
