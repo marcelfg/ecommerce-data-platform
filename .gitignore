@@ -220,3 +220,10 @@ __marimo__/
 # Data Files and others
 data/
 .DS_Store
+
+# dbt
+dbt/dbt_packages/
+dbt/dbt_internal_packages/
+dbt/logs/
+dbt/target/
+dbt/.vscode
