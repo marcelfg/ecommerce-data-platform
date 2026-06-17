@@ -1,0 +1,26 @@
+version: 2
+
+sources:
+  - name: raw
+    description: Raw data loaded from the Olist Brazilian E-commerce dataset via S3 and Snowflake COPY INTO.
+    database: olist
+    schema: raw
+    tables:
+      - name: customers
+        description: Customers who placed orders on the Olist marketplace.
+      - name: orders
+        description: Orders placed on the Olist marketplace with status and timestamps.
+      - name: order_items
+        description: Individual items within each order including price and freight value.
+      - name: order_payments
+        description: Payment transactions for each order including method and value.
+      - name: order_reviews
+        description: Customer review scores and feedback submitted after delivery.
+      - name: products
+        description: Product catalogue including category, dimensions and weight.
+      - name: sellers
+        description: Sellers who fulfilled orders on the Olist marketplace.
+      - name: geolocation
+        description: Brazilian zip code coordinates with city and state information.
+      - name: product_category_name_translation
+        description: Mapping of Portuguese product category names to English.

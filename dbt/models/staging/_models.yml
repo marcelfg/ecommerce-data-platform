@@ -1,0 +1,34 @@
+version: 2
+
+models:
+  - name: stg_olist__customers
+    description: Cleaned and renamed customer data from the Olist raw layer.
+    columns:
+      - name: customer_id
+        description: Unique identifier for each order-level customer record.
+        tests:
+          - unique
+          - not_null
+      - name: customer_unique_id
+        description: Identifier that ties multiple orders back to the same physical customer.
+        tests:
+          - not_null
+      - name: zip_code
+        description: 5-digit zip code prefix of the customer. Kept as VARCHAR to preserve leading zeros.
+        tests:
+          - not_null
+      - name: city
+        description: Customer city in lowercase.
+        tests:
+          - not_null
+      - name: state
+        description: Customer state as a 2-letter uppercase abbreviation.
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['AC','AL','AM','AP','BA','CE','DF','ES','GO','MA','MG','MS','MT','PA','PB','PE','PI','PR','RJ','RN','RO','RR','RS','SC','SE','SP','TO']
+      - name: _loaded_at
+        description: Timestamp when the record was loaded into Snowflake from S3.
+        tests:
+          - not_null
