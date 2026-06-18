@@ -92,3 +92,31 @@ models:
         description: Timestamp when the record was loaded into Snowflake from S3.
         tests:
           - not_null
+
+  - name: stg_olist__sellers
+    description: Cleaned and renamed seller data from the Olist raw layer.
+    columns:
+      - name: seller_id
+        description: Unique identifier for each seller.
+        tests:
+          - unique
+          - not_null
+      - name: zip_code
+        description: 5-digit zip code prefix of the seller. Kept as VARCHAR to preserve leading zeros.
+        tests:
+          - not_null
+      - name: city
+        description: Seller city in lowercase with surrounding whitespace removed.
+        tests:
+          - not_null
+      - name: state
+        description: Seller state as a 2-letter uppercase abbreviation.
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['AC','AL','AM','AP','BA','CE','DF','ES','GO','MA','MG','MS','MT','PA','PB','PE','PI','PR','RJ','RN','RO','RR','RS','SC','SE','SP','TO']
+      - name: _loaded_at
+        description: Timestamp when the record was loaded into Snowflake from S3.
+        tests:
+          - not_null
