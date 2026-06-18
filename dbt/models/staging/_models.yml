@@ -120,3 +120,41 @@ models:
         description: Timestamp when the record was loaded into Snowflake from S3.
         tests:
           - not_null
+
+  - name: stg_olist__orders
+    description: Cleaned and renamed order data from the Olist raw layer.
+    columns:
+      - name: order_id
+        description: Unique identifier for each order.
+        tests:
+          - unique
+          - not_null
+      - name: customer_id
+        description: Identifier linking the order to a customer record.
+        tests:
+          - not_null
+      - name: status
+        description: Current status of the order.
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['delivered','shipped','canceled','unavailable','invoiced','processing','created','approved']
+      - name: purchase_at
+        description: Timestamp when the order was placed.
+        tests:
+          - not_null
+      - name: approved_at
+        description: Timestamp when the order was approved. Null for unapproved orders.
+      - name: delivered_carrier_at
+        description: Timestamp when the order was handed to the carrier. Renamed from order_delivered_carrier_date.
+      - name: delivered_customer_at
+        description: Timestamp when the order was delivered to the customer. Renamed from order_delivered_customer_date.
+      - name: estimated_delivery_at
+        description: Estimated delivery timestamp at time of purchase. Renamed from order_estimated_delivery_date.
+        tests:
+          - not_null
+      - name: _loaded_at
+        description: Timestamp when the record was loaded into Snowflake from S3.
+        tests:
+          - not_null
