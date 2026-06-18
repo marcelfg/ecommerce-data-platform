@@ -225,3 +225,38 @@ models:
         description: Timestamp when the record was loaded into Snowflake from S3.
         tests:
           - not_null
+
+  - name: stg_olist__order_reviews
+    description: Cleaned and renamed order reviews data from the Olist raw layer.
+    columns:
+      - name: review_id
+        description: Review identifier.
+        tests:
+          - not_null
+      - name: order_id
+        description: Identifier linking the review to its parent order.
+        tests:
+          - not_null
+      - name: score
+        description: Customer satisfaction score from 1 (lowest) to 5 (highest). Cast to INT.
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [1, 2, 3, 4, 5]
+      - name: title
+        description: Review title left by the customer. Renamed from review_comment_title.
+      - name: message
+        description: Review message left by the customer. Renamed from review_comment_message.
+      - name: created_at
+        description: Timestamp when the review was sent to the customer. Renamed from review_creation_date.
+        tests:
+          - not_null
+      - name: answered_at
+        description: Timestamp when the review was answered by the customer. Renamed from review_answer_timestamp.
+        tests:
+          - not_null
+      - name: _loaded_at
+        description: Timestamp when the record was loaded into Snowflake from S3.
+        tests:
+          - not_null
