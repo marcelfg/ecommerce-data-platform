@@ -260,3 +260,20 @@ models:
         description: Timestamp when the record was loaded into Snowflake from S3.
         tests:
           - not_null
+
+  - name: stg_olist__product_category_name_translation
+    description: Lookup table mapping Portuguese product category names to English.
+    columns:
+      - name: category_name
+        description: Product category name in Portuguese.
+        tests:
+          - unique
+          - not_null
+      - name: category_name_english
+        description: Product category name in English.
+        tests:
+          - not_null
+      - name: _loaded_at
+        description: Timestamp when the record was loaded into Snowflake from S3.
+        tests:
+          - not_null
