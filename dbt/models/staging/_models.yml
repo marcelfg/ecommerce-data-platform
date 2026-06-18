@@ -34,28 +34,22 @@ models:
           - not_null
 
   - name: stg_olist__geolocation
-    description: >
-      Cleaned and renamed geolocation data from the Olist raw layer.
-      Each row maps a Brazilian zip code prefix to a lat/lng coordinate point.
-      Zip codes intentionally appear on multiple rows — each prefix covers a geographic
-      area and may have many coordinate points. Exact duplicates (26% of rows) and
-      42 out-of-bounds coordinates are preserved from the source; deduplication and
-      coordinate filtering belong in downstream intermediate models.
+    description: Cleaned and renamed geolocation data from the Olist raw layer.
     columns:
       - name: zip_code
         description: 5-digit Brazilian zip code prefix. Not unique — multiple coordinate points exist per prefix. Kept as VARCHAR to preserve leading zeros.
         tests:
           - not_null
       - name: latitude
-        description: Latitude of the coordinate point. Cast to NUMBER(8,6). A NULL indicates a source value that could not be cast to a number. Note — 42 rows contain geometrically valid numbers that fall outside Brazil's bounding box (geocoding errors in the source).
+        description: Latitude of the coordinate point. Cast to NUMBER(8,6).
         tests:
           - not_null
       - name: longitude
-        description: Longitude of the coordinate point. Cast to NUMBER(9,6). A NULL indicates a source value that could not be cast to a number. Note — 42 rows contain geometrically valid numbers that fall outside Brazil's bounding box (geocoding errors in the source).
+        description: Longitude of the coordinate point. Cast to NUMBER(9,6).
         tests:
           - not_null
       - name: city
-        description: City name in lowercase with surrounding whitespace removed. May contain accented characters, encoding artefacts, or abbreviations inherited from the source.
+        description: City name in lowercase with surrounding whitespace removed.
         tests:
           - not_null
       - name: state
@@ -65,6 +59,35 @@ models:
           - accepted_values:
               arguments:
                 values: ['AC','AL','AM','AP','BA','CE','DF','ES','GO','MA','MG','MS','MT','PA','PB','PE','PI','PR','RJ','RN','RO','RR','RS','SC','SE','SP','TO']
+      - name: _loaded_at
+        description: Timestamp when the record was loaded into Snowflake from S3.
+        tests:
+          - not_null
+
+  - name: stg_olist__products
+    description: Cleaned and renamed product catalogue data from the Olist raw layer.
+    columns:
+      - name: product_id
+        description: Unique identifier for each product.
+        tests:
+          - unique
+          - not_null
+      - name: category_name
+        description: Product category in Portuguese.
+      - name: name_length
+        description: Character count of the product name. Renamed from product_name_lenght.
+      - name: description_length
+        description: Character count of the product description. Renamed from product_description_lenght.
+      - name: photos_qty
+        description: Number of product photos.
+      - name: weight_g
+        description: Product weight in grams.
+      - name: length_cm
+        description: Product length in centimetres.
+      - name: height_cm
+        description: Product height in centimetres.
+      - name: width_cm
+        description: Product width in centimetres.
       - name: _loaded_at
         description: Timestamp when the record was loaded into Snowflake from S3.
         tests:
