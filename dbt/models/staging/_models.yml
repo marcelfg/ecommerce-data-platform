@@ -167,7 +167,7 @@ models:
         tests:
           - not_null
       - name: order_item_id
-        description: Sequential item number within the order, starting at 1. Combined with order_id forms the primary key.
+        description: Sequential item number within the order, starting at 1. Combined with order_id forms the primary key. Cast to INT.
         tests:
           - not_null
       - name: product_id
@@ -188,6 +188,37 @@ models:
           - not_null
       - name: freight_value
         description: Freight cost for the item in BRL. Cast to NUMBER(10,2). Zero for free shipping items. If an order has more than one item the freight value is splitted between items.
+        tests:
+          - not_null
+      - name: _loaded_at
+        description: Timestamp when the record was loaded into Snowflake from S3.
+        tests:
+          - not_null
+
+  - name: stg_olist__order_payments
+    description: Cleaned and renamed order payments data from the Olist raw layer.
+    columns:
+      - name: order_id
+        description: Identifier linking the payment to its parent order.
+        tests:
+          - not_null
+      - name: payment_sequential
+        description: A customer may pay an order with more than one payment method. If he does so, a sequence will be created to accommodate all payments. Combined with order_id forms the primary key.
+        tests:
+          - not_null
+      - name: payment_type
+        description: Payment method used.
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['credit_card','boleto','voucher','debit_card','not_defined']
+      - name: payment_installments
+        description: Number of installments chosen by the customer. Cast to INT.
+        tests:
+          - not_null
+      - name: payment_value
+        description: Total value of the payment in BRL. Cast to NUMBER(10,2).
         tests:
           - not_null
       - name: _loaded_at

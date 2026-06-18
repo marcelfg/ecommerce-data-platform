@@ -8,7 +8,7 @@ renamed AS (
 
     SELECT
         order_id,
-        order_item_id,
+        TRY_CAST(order_item_id AS INT)              AS order_item_id,
         product_id,
         seller_id,
         TRY_TO_TIMESTAMP_NTZ(shipping_limit_date)   AS shipping_limit_at,
