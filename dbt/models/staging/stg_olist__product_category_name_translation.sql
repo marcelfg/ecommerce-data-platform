@@ -7,8 +7,8 @@ WITH source AS (
 renamed AS (
 
     SELECT
-        product_category_name          AS category_name,
-        product_category_name_english  AS category_name_english,
+        product_category_name          AS product_category_name_pt,
+        product_category_name_english  AS product_category_name_en,
         _loaded_at::TIMESTAMP_NTZ      AS _loaded_at
     FROM source
 

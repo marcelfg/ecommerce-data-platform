@@ -13,15 +13,15 @@ models:
         description: Identifier that ties multiple orders back to the same physical customer.
         tests:
           - not_null
-      - name: zip_code
+      - name: customer_zip_code
         description: 5-digit zip code prefix of the customer. Kept as VARCHAR to preserve leading zeros.
         tests:
           - not_null
-      - name: city
+      - name: customer_city
         description: Customer city in lowercase with surrounding whitespace removed.
         tests:
           - not_null
-      - name: state
+      - name: customer_state
         description: Customer state as a 2-letter uppercase abbreviation.
         tests:
           - not_null
@@ -72,13 +72,13 @@ models:
         tests:
           - unique
           - not_null
-      - name: category_name
+      - name: product_category_name
         description: Product category in Portuguese.
-      - name: name_length
+      - name: product_name_length
         description: Character count of the product name. Renamed from product_name_lenght.
-      - name: description_length
+      - name: product_description_length
         description: Character count of the product description. Renamed from product_description_lenght.
-      - name: photos_qty
+      - name: product_photos_qty
         description: Number of product photos.
       - name: weight_g
         description: Product weight in grams.
@@ -101,15 +101,15 @@ models:
         tests:
           - unique
           - not_null
-      - name: zip_code
+      - name: seller_zip_code
         description: 5-digit zip code prefix of the seller. Kept as VARCHAR to preserve leading zeros.
         tests:
           - not_null
-      - name: city
+      - name: seller_city
         description: Seller city in lowercase with surrounding whitespace removed.
         tests:
           - not_null
-      - name: state
+      - name: seller_state
         description: Seller state as a 2-letter uppercase abbreviation.
         tests:
           - not_null
@@ -133,24 +133,24 @@ models:
         description: Identifier linking the order to a customer record.
         tests:
           - not_null
-      - name: status
+      - name: order_status
         description: Current status of the order.
         tests:
           - not_null
           - accepted_values:
               arguments:
                 values: ['delivered','shipped','canceled','unavailable','invoiced','processing','created','approved']
-      - name: purchase_at
+      - name: order_purchased_at
         description: Timestamp when the order was placed.
         tests:
           - not_null
-      - name: approved_at
+      - name: order_approved_at
         description: Timestamp when the order was approved. Null for unapproved orders.
-      - name: delivered_carrier_at
+      - name: order_delivered_to_carrier_at
         description: Timestamp when the order was handed to the carrier. Renamed from order_delivered_carrier_date.
-      - name: delivered_customer_at
+      - name: order_delivered_to_customer_at
         description: Timestamp when the order was delivered to the customer. Renamed from order_delivered_customer_date.
-      - name: estimated_delivery_at
+      - name: order_estimated_delivery_at
         description: Estimated delivery timestamp at time of purchase. Renamed from order_estimated_delivery_date.
         tests:
           - not_null
@@ -237,22 +237,22 @@ models:
         description: Identifier linking the review to its parent order.
         tests:
           - not_null
-      - name: score
+      - name: review_score
         description: Customer satisfaction score from 1 (lowest) to 5 (highest). Cast to INT.
         tests:
           - not_null
           - accepted_values:
               arguments:
                 values: [1, 2, 3, 4, 5]
-      - name: title
+      - name: review_title
         description: Review title left by the customer. Renamed from review_comment_title.
-      - name: message
+      - name: review_message
         description: Review message left by the customer. Renamed from review_comment_message.
-      - name: created_at
+      - name: review_created_at
         description: Timestamp when the review was sent to the customer. Renamed from review_creation_date.
         tests:
           - not_null
-      - name: answered_at
+      - name: review_answered_at
         description: Timestamp when the review was answered by the customer. Renamed from review_answer_timestamp.
         tests:
           - not_null
@@ -264,12 +264,12 @@ models:
   - name: stg_olist__product_category_name_translation
     description: Lookup table mapping Portuguese product category names to English.
     columns:
-      - name: category_name
+      - name: product_category_name_pt
         description: Product category name in Portuguese.
         tests:
           - unique
           - not_null
-      - name: category_name_english
+      - name: product_category_name_en
         description: Product category name in English.
         tests:
           - not_null
