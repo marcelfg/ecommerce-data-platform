@@ -6,31 +6,31 @@ models:
     columns:
       - name: customer_id
         description: Unique identifier for each order-level customer record.
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: customer_unique_id
         description: Identifier that ties multiple orders back to the same physical customer.
-        tests:
+        data_tests:
           - not_null
       - name: customer_zip_code
         description: 5-digit zip code prefix of the customer. Kept as VARCHAR to preserve leading zeros.
-        tests:
+        data_tests:
           - not_null
       - name: customer_city
         description: Customer city in lowercase with surrounding whitespace removed.
-        tests:
+        data_tests:
           - not_null
       - name: customer_state
         description: Customer state as a 2-letter uppercase abbreviation.
-        tests:
+        data_tests:
           - not_null
           - accepted_values:
               arguments:
                 values: ['AC','AL','AM','AP','BA','CE','DF','ES','GO','MA','MG','MS','MT','PA','PB','PE','PI','PR','RJ','RN','RO','RR','RS','SC','SE','SP','TO']
       - name: _loaded_at
         description: Timestamp when the record was loaded into Snowflake from S3.
-        tests:
+        data_tests:
           - not_null
 
   - name: stg_olist__geolocation
@@ -38,30 +38,30 @@ models:
     columns:
       - name: zip_code
         description: 5-digit Brazilian zip code prefix. Not unique — multiple coordinate points exist per prefix. Kept as VARCHAR to preserve leading zeros.
-        tests:
+        data_tests:
           - not_null
       - name: latitude
         description: Latitude of the coordinate point. Cast to NUMBER(8,6).
-        tests:
+        data_tests:
           - not_null
       - name: longitude
         description: Longitude of the coordinate point. Cast to NUMBER(9,6).
-        tests:
+        data_tests:
           - not_null
       - name: city
         description: City name in lowercase with surrounding whitespace removed.
-        tests:
+        data_tests:
           - not_null
       - name: state
         description: Brazilian state as a 2-letter uppercase abbreviation.
-        tests:
+        data_tests:
           - not_null
           - accepted_values:
               arguments:
                 values: ['AC','AL','AM','AP','BA','CE','DF','ES','GO','MA','MG','MS','MT','PA','PB','PE','PI','PR','RJ','RN','RO','RR','RS','SC','SE','SP','TO']
       - name: _loaded_at
         description: Timestamp when the record was loaded into Snowflake from S3.
-        tests:
+        data_tests:
           - not_null
 
   - name: stg_olist__products
@@ -69,7 +69,7 @@ models:
     columns:
       - name: product_id
         description: Unique identifier for each product.
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: product_category_name
@@ -90,7 +90,7 @@ models:
         description: Product width in centimetres.
       - name: _loaded_at
         description: Timestamp when the record was loaded into Snowflake from S3.
-        tests:
+        data_tests:
           - not_null
 
   - name: stg_olist__sellers
@@ -98,27 +98,27 @@ models:
     columns:
       - name: seller_id
         description: Unique identifier for each seller.
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: seller_zip_code
         description: 5-digit zip code prefix of the seller. Kept as VARCHAR to preserve leading zeros.
-        tests:
+        data_tests:
           - not_null
       - name: seller_city
         description: Seller city in lowercase with surrounding whitespace removed.
-        tests:
+        data_tests:
           - not_null
       - name: seller_state
         description: Seller state as a 2-letter uppercase abbreviation.
-        tests:
+        data_tests:
           - not_null
           - accepted_values:
               arguments:
                 values: ['AC','AL','AM','AP','BA','CE','DF','ES','GO','MA','MG','MS','MT','PA','PB','PE','PI','PR','RJ','RN','RO','RR','RS','SC','SE','SP','TO']
       - name: _loaded_at
         description: Timestamp when the record was loaded into Snowflake from S3.
-        tests:
+        data_tests:
           - not_null
 
   - name: stg_olist__orders
@@ -126,23 +126,27 @@ models:
     columns:
       - name: order_id
         description: Unique identifier for each order.
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: customer_id
         description: Identifier linking the order to a customer record.
-        tests:
+        data_tests:
           - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_olist__customers')
+                field: customer_id
       - name: order_status
         description: Current status of the order.
-        tests:
+        data_tests:
           - not_null
           - accepted_values:
               arguments:
                 values: ['delivered','shipped','canceled','unavailable','invoiced','processing','created','approved']
       - name: order_purchased_at
         description: Timestamp when the order was placed.
-        tests:
+        data_tests:
           - not_null
       - name: order_approved_at
         description: Timestamp when the order was approved. Null for unapproved orders.
@@ -152,11 +156,11 @@ models:
         description: Timestamp when the order was delivered to the customer. Renamed from order_delivered_customer_date.
       - name: order_estimated_delivery_at
         description: Estimated delivery timestamp at time of purchase. Renamed from order_estimated_delivery_date.
-        tests:
+        data_tests:
           - not_null
       - name: _loaded_at
         description: Timestamp when the record was loaded into Snowflake from S3.
-        tests:
+        data_tests:
           - not_null
 
   - name: stg_olist__order_items
@@ -164,35 +168,47 @@ models:
     columns:
       - name: order_id
         description: Identifier linking the item to its parent order.
-        tests:
+        data_tests:
           - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_olist__orders')
+                field: order_id
       - name: order_item_id
         description: Sequential item number within the order, starting at 1. Combined with order_id forms the primary key. Cast to INT.
-        tests:
+        data_tests:
           - not_null
       - name: product_id
         description: Identifier of the product purchased.
-        tests:
+        data_tests:
           - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_olist__products')
+                field: product_id
       - name: seller_id
         description: Identifier of the seller who fulfilled the item.
-        tests:
+        data_tests:
           - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_olist__sellers')
+                field: seller_id
       - name: shipping_limit_at
         description: Deadline by which the seller must hand the item to the logistic partner. Renamed from shipping_limit_date.
-        tests:
+        data_tests:
           - not_null
       - name: price
         description: Item sale price in BRL. Cast to NUMBER(10,2).
-        tests:
+        data_tests:
           - not_null
       - name: freight_value
         description: Freight cost for the item in BRL. Cast to NUMBER(10,2). Zero for free shipping items. If an order has more than one item the freight value is splitted between items.
-        tests:
+        data_tests:
           - not_null
       - name: _loaded_at
         description: Timestamp when the record was loaded into Snowflake from S3.
-        tests:
+        data_tests:
           - not_null
 
   - name: stg_olist__order_payments
@@ -200,30 +216,34 @@ models:
     columns:
       - name: order_id
         description: Identifier linking the payment to its parent order.
-        tests:
+        data_tests:
           - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_olist__orders')
+                field: order_id
       - name: payment_sequential
         description: A customer may pay an order with more than one payment method. If he does so, a sequence will be created to accommodate all payments. Combined with order_id forms the primary key.
-        tests:
+        data_tests:
           - not_null
       - name: payment_type
         description: Payment method used.
-        tests:
+        data_tests:
           - not_null
           - accepted_values:
               arguments:
                 values: ['credit_card','boleto','voucher','debit_card','not_defined']
       - name: payment_installments
         description: Number of installments chosen by the customer. Cast to INT.
-        tests:
+        data_tests:
           - not_null
       - name: payment_value
         description: Total value of the payment in BRL. Cast to NUMBER(10,2).
-        tests:
+        data_tests:
           - not_null
       - name: _loaded_at
         description: Timestamp when the record was loaded into Snowflake from S3.
-        tests:
+        data_tests:
           - not_null
 
   - name: stg_olist__order_reviews
@@ -231,15 +251,19 @@ models:
     columns:
       - name: review_id
         description: Review identifier.
-        tests:
+        data_tests:
           - not_null
       - name: order_id
         description: Identifier linking the review to its parent order.
-        tests:
+        data_tests:
           - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_olist__orders')
+                field: order_id
       - name: review_score
         description: Customer satisfaction score from 1 (lowest) to 5 (highest). Cast to INT.
-        tests:
+        data_tests:
           - not_null
           - accepted_values:
               arguments:
@@ -250,15 +274,15 @@ models:
         description: Review message left by the customer. Renamed from review_comment_message.
       - name: review_created_at
         description: Timestamp when the review was sent to the customer. Renamed from review_creation_date.
-        tests:
+        data_tests:
           - not_null
       - name: review_answered_at
         description: Timestamp when the review was answered by the customer. Renamed from review_answer_timestamp.
-        tests:
+        data_tests:
           - not_null
       - name: _loaded_at
         description: Timestamp when the record was loaded into Snowflake from S3.
-        tests:
+        data_tests:
           - not_null
 
   - name: stg_olist__product_category_name_translation
@@ -266,14 +290,14 @@ models:
     columns:
       - name: product_category_name_pt
         description: Product category name in Portuguese.
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: product_category_name_en
         description: Product category name in English.
-        tests:
+        data_tests:
           - not_null
       - name: _loaded_at
         description: Timestamp when the record was loaded into Snowflake from S3.
-        tests:
+        data_tests:
           - not_null
