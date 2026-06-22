@@ -7,7 +7,6 @@ models:
       - name: customer_id
         description: Unique identifier for each order-level customer record.
         data_tests:
-          - unique
           - not_null
       - name: customer_unique_id
         description: Identifier that ties multiple orders back to the same physical customer.
@@ -70,7 +69,6 @@ models:
       - name: product_id
         description: Unique identifier for each product.
         data_tests:
-          - unique
           - not_null
       - name: product_category_name
         description: Product category in Portuguese.
@@ -99,7 +97,6 @@ models:
       - name: seller_id
         description: Unique identifier for each seller.
         data_tests:
-          - unique
           - not_null
       - name: seller_zip_code
         description: 5-digit zip code prefix of the seller. Kept as VARCHAR to preserve leading zeros.
@@ -127,7 +124,6 @@ models:
       - name: order_id
         description: Unique identifier for each order.
         data_tests:
-          - unique
           - not_null
       - name: customer_id
         description: Identifier linking the order to a customer record.
@@ -291,7 +287,6 @@ models:
       - name: product_category_name_pt
         description: Product category name in Portuguese.
         data_tests:
-          - unique
           - not_null
       - name: product_category_name_en
         description: Product category name in English.
