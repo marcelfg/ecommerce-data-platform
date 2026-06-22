@@ -1,0 +1,106 @@
+version: 2
+
+models:
+  - name: int_olist__customers_deduped
+    description: One row per customer_id. Deduplicates stg_olist__customers by keeping the most recently loaded record.
+    columns:
+      - name: customer_id
+        data_tests:
+          - unique
+          - not_null
+
+  - name: int_olist__products_deduped
+    description: One row per product_id. Deduplicates stg_olist__products by keeping the most recently loaded record.
+    columns:
+      - name: product_id
+        data_tests:
+          - unique
+          - not_null
+
+  - name: int_olist__sellers_deduped
+    description: One row per seller_id. Deduplicates stg_olist__sellers by keeping the most recently loaded record.
+    columns:
+      - name: seller_id
+        data_tests:
+          - unique
+          - not_null
+
+  - name: int_olist__orders_deduped
+    description: One row per order_id. Deduplicates stg_olist__orders by keeping the most recently loaded record.
+    columns:
+      - name: order_id
+        data_tests:
+          - unique
+          - not_null
+
+  - name: int_olist__order_items_deduped
+    description: One row per order_id + order_item_id. Deduplicates stg_olist__order_items by keeping the most recently loaded record.
+    data_tests:
+      - unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - order_id
+              - order_item_id
+    columns:
+      - name: order_id
+        data_tests:
+          - not_null
+      - name: order_item_id
+        data_tests:
+          - not_null
+
+  - name: int_olist__order_payments_deduped
+    description: One row per order_id + payment_sequential. Deduplicates stg_olist__order_payments by keeping the most recently loaded record.
+    data_tests:
+      - unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - order_id
+              - payment_sequential
+    columns:
+      - name: order_id
+        data_tests:
+          - not_null
+      - name: payment_sequential
+        data_tests:
+          - not_null
+
+  - name: int_olist__product_category_name_translation_deduped
+    description: One row per product_category_name_pt. Deduplicates stg_olist__product_category_name_translation by keeping the most recently loaded record.
+    columns:
+      - name: product_category_name_pt
+        data_tests:
+          - unique
+          - not_null
+
+  - name: int_olist__geolocation_aggregated
+    description: One row per zip_code. Removes exact duplicate coordinate rows and averages latitude and longitude. City and state excluded due to source data quality.
+    columns:
+      - name: zip_code
+        data_tests:
+          - unique
+          - not_null
+      - name: latitude
+        description: Average latitude of all distinct coordinate points for the zip code. Cast to NUMBER(8,6).
+        data_tests:
+          - not_null
+      - name: longitude
+        description: Average longitude of all distinct coordinate points for the zip code. Cast to NUMBER(9,6).
+        data_tests:
+          - not_null
+
+  - name: int_olist__order_reviews_deduped
+    description: One row per review_id + order_id. Deduplicates stg_olist__order_reviews on the composite business key by keeping the most recently loaded record.
+    data_tests:
+      - unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - review_id
+              - order_id
+    columns:
+      - name: review_id
+        data_tests:
+          - not_null
+      - name: order_id
+        data_tests:
+          - not_null
