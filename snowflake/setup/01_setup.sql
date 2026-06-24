@@ -2,7 +2,8 @@
 CREATE DATABASE olist;
 
 -- Create the schemas
-CREATE SCHEMA olist.raw;
-CREATE SCHEMA olist.staging;
-CREATE SCHEMA olist.intermediate;
-CREATE SCHEMA olist.marts;
+CREATE SCHEMA IF NOT EXISTS olist.raw;
+CREATE SCHEMA IF NOT EXISTS olist.staging;
+CREATE SCHEMA IF NOT EXISTS olist.intermediate;
+CREATE SCHEMA IF NOT EXISTS olist.marts;
+CREATE SCHEMA IF NOT EXISTS olist.reference;
