@@ -37,7 +37,7 @@ import pandas as pd
 # Paths & constants
 # ---------------------------------------------------------------------------
 
-PROJECT_ROOT = Path(__file__).parent.parent
+PROJECT_ROOT = Path(__file__).parent.parent.parent
 DATA_DIR = PROJECT_ROOT / "data"
 SEED_PATH = PROJECT_ROOT / "dbt" / "seeds" / "location_standardization.csv"
 
