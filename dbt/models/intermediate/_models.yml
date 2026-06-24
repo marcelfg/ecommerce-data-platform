@@ -73,22 +73,6 @@ models:
           - unique
           - not_null
 
-  - name: int_olist__geolocation_aggregated
-    description: One row per zip_code. Removes exact duplicate coordinate rows and averages latitude and longitude. City and state excluded due to source data quality.
-    columns:
-      - name: zip_code
-        data_tests:
-          - unique
-          - not_null
-      - name: latitude
-        description: Average latitude of all distinct coordinate points for the zip code. Cast to NUMBER(8,6).
-        data_tests:
-          - not_null
-      - name: longitude
-        description: Average longitude of all distinct coordinate points for the zip code. Cast to NUMBER(9,6).
-        data_tests:
-          - not_null
-
   - name: int_olist__order_reviews_deduped
     description: One row per review_id + order_id. Deduplicates stg_olist__order_reviews on the composite business key by keeping the most recently loaded record.
     data_tests:
@@ -102,5 +86,56 @@ models:
         data_tests:
           - not_null
       - name: order_id
+        data_tests:
+          - not_null
+
+  - name: int_olist__geolocation_aggregated
+    description: One row per zip_code. Removes exact duplicate coordinate rows and averages latitude and longitude. City and state excluded due to source data quality.
+    columns:
+      - name: zip_code
+        description: 5-digit Brazilian zip code prefix. Kept as VARCHAR to preserve leading zeros.
+        data_tests:
+          - unique
+          - not_null
+      - name: latitude
+        description: Average latitude of all distinct coordinate points for the zip code. Cast to NUMBER(8,6).
+        data_tests:
+          - not_null
+      - name: longitude
+        description: Average longitude of all distinct coordinate points for the zip code. Cast to NUMBER(9,6).
+        data_tests:
+          - not_null
+
+  - name: int_olist__customers_cleaned
+    description: One row per customer_id. Standardises city and state names using the location_standardization seed.
+    columns:
+      - name: customer_id
+        description: Unique identifier for each order-level customer record.
+        data_tests:
+          - unique
+          - not_null
+      - name: customer_city
+        description: Customer city after applying location standardisation.
+        data_tests:
+          - not_null
+      - name: customer_state
+        description: Customer state as a 2-letter uppercase abbreviation after applying location standardisation.
+        data_tests:
+          - not_null
+
+  - name: int_olist__sellers_cleaned
+    description: One row per seller_id. Standardises city and state names using the location_standardization seed.
+    columns:
+      - name: seller_id
+        description: Unique identifier for each seller.
+        data_tests:
+          - unique
+          - not_null
+      - name: seller_city
+        description: Seller city after applying location standardisation.
+        data_tests:
+          - not_null
+      - name: seller_state
+        description: Seller state as a 2-letter uppercase abbreviation after applying location standardisation.
         data_tests:
           - not_null
