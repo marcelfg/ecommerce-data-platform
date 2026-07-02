@@ -1,9 +1,7 @@
 [sqlfluff]
 dialect = snowflake
 templater = dbt
-
-[sqlfluff:rules]
 exclude_rules = ST06, AM04
 
 [sqlfluff:templater:dbt]
-project_dir = ./
+project_dir = .
