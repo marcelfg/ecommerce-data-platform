@@ -58,6 +58,25 @@ models:
       - name: longitude
         description: Centroid longitude for the seller zip code from int_olist__geolocation_aggregated.
 
+  - name: int_olist__order_reviews_enriched
+    description: Deduplicated order reviews enriched with sentiment classification, response time and message presence flag.
+    data_tests:
+      - unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - order_id
+              - review_id
+    columns:
+      - name: review_sentiment
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['positive', 'neutral', 'negative']
+      - name: has_message
+        data_tests:
+          - not_null
+
   - name: int_olist__products_enriched
     description: Deduplicated products with English category name joined from the translation table.
     columns:
