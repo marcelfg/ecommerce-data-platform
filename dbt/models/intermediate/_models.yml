@@ -57,3 +57,13 @@ models:
         description: Centroid latitude for the seller zip code from int_olist__geolocation_aggregated.
       - name: longitude
         description: Centroid longitude for the seller zip code from int_olist__geolocation_aggregated.
+
+  - name: int_olist__products_enriched
+    description: Deduplicated products with English category name joined from the translation table.
+    columns:
+      - name: product_id
+        data_tests:
+          - unique
+          - not_null
+      - name: product_category
+        description: English product category name translated from Portuguese.
