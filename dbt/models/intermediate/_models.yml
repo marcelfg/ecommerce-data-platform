@@ -17,3 +17,43 @@ models:
         description: Average longitude of all distinct coordinate points for the zip code. Cast to NUMBER(9,6).
         data_tests:
           - not_null
+
+  - name: int_olist__customers_enriched
+    description: Deduplicated customers with standardised city and state, and geolocation coordinates joined on zip code.
+    columns:
+      - name: customer_id
+        data_tests:
+          - unique
+          - not_null
+      - name: customer_city
+        description: Standardised city from location_standardization, falling back to original value if no match.
+        data_tests:
+          - not_null
+      - name: customer_state
+        description: Standardised state from location_standardization, falling back to original value if no match.
+        data_tests:
+          - not_null
+      - name: latitude
+        description: Centroid latitude for the customer zip code from int_olist__geolocation_aggregated.
+      - name: longitude
+        description: Centroid longitude for the customer zip code from int_olist__geolocation_aggregated.
+
+  - name: int_olist__sellers_enriched
+    description: Deduplicated sellers with standardised city and state, and geolocation coordinates joined on zip code.
+    columns:
+      - name: seller_id
+        data_tests:
+          - unique
+          - not_null
+      - name: seller_city
+        description: Standardised city from location_standardization, falling back to original value if no match.
+        data_tests:
+          - not_null
+      - name: seller_state
+        description: Standardised state from location_standardization, falling back to original value if no match.
+        data_tests:
+          - not_null
+      - name: latitude
+        description: Centroid latitude for the seller zip code from int_olist__geolocation_aggregated.
+      - name: longitude
+        description: Centroid longitude for the seller zip code from int_olist__geolocation_aggregated.
