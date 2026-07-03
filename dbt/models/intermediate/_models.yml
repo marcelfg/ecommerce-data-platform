@@ -180,3 +180,36 @@ models:
           - dbt_utils.expression_is_true:
               arguments:
                 expression: "> 0"
+
+  - name: int_olist__orders_enriched
+    description: Orders enriched with customer location, delivery time metrics, payment summary and review sentiment.
+    columns:
+      - name: order_id
+        data_tests:
+          - unique
+          - not_null
+      - name: customer_id
+        data_tests:
+          - not_null
+      - name: customer_unique_id
+        data_tests:
+          - not_null
+      - name: order_status
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['delivered', 'shipped', 'canceled', 'unavailable', 'processing', 'invoiced', 'created', 'approved']
+      - name: order_purchased_at
+        data_tests:
+          - not_null
+      - name: primary_payment_type
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['credit_card', 'boleto', 'voucher', 'debit_card', 'not_defined']
+      - name: overall_sentiment
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['positive', 'neutral', 'negative']
