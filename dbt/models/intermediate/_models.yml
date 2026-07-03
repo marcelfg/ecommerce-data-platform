@@ -100,6 +100,43 @@ models:
         data_tests:
           - not_null
 
+  - name: int_olist__order_payments_aggregated
+    description: One row per order aggregating payment methods, values, installments and payment type flags.
+    columns:
+      - name: order_id
+        data_tests:
+          - unique
+          - not_null
+      - name: total_payment_value
+        data_tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: "> 0"
+              config:
+                where: "primary_payment_type <> 'not_defined'" 
+      - name: number_of_payment_types
+        data_tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: ">= 1"
+      - name: has_split_payment
+        data_tests:
+          - not_null
+      - name: primary_payment_type
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['credit_card', 'boleto', 'voucher', 'debit_card', 'not_defined']
+      - name: used_credit_card
+        data_tests:
+          - not_null
+      - name: used_voucher
+        data_tests:
+          - not_null
+
   - name: int_olist__products_enriched
     description: Deduplicated products with English category name joined from the translation table.
     columns:
