@@ -1,0 +1,57 @@
+version: 2
+
+models:
+  - name: dim_customers
+    description: Customer dimension at customer_unique_id grain with RFM-style lifetime metrics derived from order history.
+    columns:
+      - name: customer_unique_id
+        data_tests:
+          - unique
+          - not_null
+      - name: first_purchase_date
+        data_tests:
+          - not_null
+      - name: latest_purchase_date
+        data_tests:
+          - not_null
+      - name: customer_lifespan_days
+        data_tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: ">= 0"
+      - name: lifetime_revenue
+        data_tests:
+          - not_null:
+              config:
+                severity: warn
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: ">= 0"
+              config:
+                severity: warn
+      - name: lifetime_order_count
+        data_tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: ">= 1"
+      - name: average_order_value
+        data_tests:
+          - not_null:
+              config:
+                severity: warn
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: ">= 0"
+              config:
+                severity: warn
+      - name: is_repeat_customer
+        data_tests:
+          - not_null
+      - name: preferred_payment_type
+        description: Most frequent primary_payment_type across the customer's orders. Reflects the dominant payment method per order, not every method used in split payments.
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['credit_card', 'boleto', 'voucher', 'debit_card', 'not_defined']
