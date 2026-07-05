@@ -72,3 +72,41 @@ models:
       - name: seller_state
         data_tests:
           - not_null
+
+  - name: dim_products
+    description: Product dimension at product_id grain with category, listing quality attributes and physical dimensions.
+    columns:
+      - name: product_id
+        data_tests:
+          - unique
+          - not_null
+      - name: product_category
+        data_tests:
+          - not_null:
+              config:
+                severity: warn
+      - name: listing_photo_count
+        data_tests:
+          - not_null:
+              config:
+                severity: warn
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: ">= 0"
+              config:
+                where: "listing_photo_count IS NOT NULL"
+      - name: weight_g
+        data_tests:
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: "> 0"
+              config:
+                where: "weight_g IS NOT NULL"
+                severity: warn
+      - name: product_volume_cm3
+        data_tests:
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: "> 0"
+              config:
+                where: "product_volume_cm3 IS NOT NULL"
