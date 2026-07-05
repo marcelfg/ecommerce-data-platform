@@ -55,3 +55,20 @@ models:
           - accepted_values:
               arguments:
                 values: ['credit_card', 'boleto', 'voucher', 'debit_card', 'not_defined']
+
+  - name: dim_sellers
+    description: Seller dimension at seller_id grain with stable location attributes.
+    columns:
+      - name: seller_id
+        data_tests:
+          - unique
+          - not_null
+      - name: seller_zip_code
+        data_tests:
+          - not_null
+      - name: seller_city
+        data_tests:
+          - not_null
+      - name: seller_state
+        data_tests:
+          - not_null
