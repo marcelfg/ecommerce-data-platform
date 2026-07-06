@@ -110,3 +110,64 @@ models:
                 expression: "> 0"
               config:
                 where: "product_volume_cm3 IS NOT NULL"
+
+  - name: fct_orders
+    description: Order-level fact table combining order status, delivery timing, item totals, payment summary and review sentiment.
+    columns:
+      - name: order_id
+        data_tests:
+          - unique
+          - not_null
+      - name: customer_unique_id
+        data_tests:
+          - not_null
+      - name: order_status
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['delivered', 'shipped', 'canceled', 'unavailable', 'processing', 'invoiced', 'created', 'approved']
+      - name: order_purchased_at
+        data_tests:
+          - not_null
+      - name: item_count
+        data_tests:
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: ">= 1"
+              config:
+                where: "item_count IS NOT NULL"
+      - name: total_price
+        data_tests:
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: "> 0"
+              config:
+                where: "total_price IS NOT NULL"
+      - name: total_payment_value
+        data_tests:
+          - not_null:
+              config:
+                severity: warn
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: "> 0"
+              config:
+                where: "primary_payment_type <> 'not_defined' AND total_payment_value IS NOT NULL"
+      - name: primary_payment_type
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['credit_card', 'boleto', 'voucher', 'debit_card', 'not_defined']
+      - name: discount_rate
+        data_tests:
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: "BETWEEN 0 AND 1"
+              config:
+                where: "discount_rate IS NOT NULL"
+      - name: overall_sentiment
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['positive', 'neutral', 'negative']
